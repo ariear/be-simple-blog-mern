@@ -6,14 +6,27 @@ import path from 'path'
 import fs from 'fs'
 
 export const getBlogsController = (req , res) => {
-    BlogPost.find().sort({createdAt: 'desc'}).then((results) => {
-        res.json(
-            {
-                message: 'Get Post Successfully!!',
-                data: results
-            }
-        )
-    } )
+    const currentPage = parseInt(req.query.page) || 1
+    const limit = parseInt(req.query.limit) || 5
+    let totalData
+
+    BlogPost.find()
+        .countDocuments()
+        .then(count => {
+            totalData = count
+            return BlogPost.find().sort({createdAt: 'desc'}).skip((currentPage - 1) * limit).limit(limit)
+        }).then(results => {
+                res.json(
+                    {
+                        message: 'Get Post Successfully!!',
+                        data: results,
+                        page: currentPage,
+                        limit: limit,
+                        total_data: totalData
+                    }
+                )
+            } )
+
 }
 export const getDetailBlogController = (req , res) => {
     BlogPost.findById(req.params.id).then((results) => {

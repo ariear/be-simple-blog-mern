@@ -5,10 +5,12 @@ import register from './src/routes/auth/register.js'
 import mongoose from 'mongoose'
 import multer from 'multer'
 import 'dotenv/config'
+import cors from 'cors'
 
 const app = express()
 app.use(bodyParser.json())
 app.use('/images', express.static('images'));
+app.use(cors())
 
 const imageStorage = multer.diskStorage({
     destination: (req, file, cb) => {
