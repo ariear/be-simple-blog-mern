@@ -1,7 +1,7 @@
 import express from 'express'
 import blogsRouter from './src/routes/blogs.js'
 import bodyParser from 'body-parser'
-import register from './src/routes/auth/register.js'
+import auth from './src/routes/auth/auth.js'
 import mongoose from 'mongoose'
 import multer from 'multer'
 import 'dotenv/config'
@@ -29,7 +29,7 @@ const imageFilter = (req,file,cb) => {
 }
 app.use(multer({storage: imageStorage}).single('image'))
 
-app.use('/v1/auth',register)
+app.use('/v1/auth',auth)
 app.use('/v1/blogs',blogsRouter)
 
 app.use((req,res) => {
